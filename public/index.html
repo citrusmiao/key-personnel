@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title>
+    <%= webpackConfig.name %>
+  </title>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= webpackConfig.name %> doesn't work properly without JavaScript enabled. Please enable it
+        to continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+  <!-- 腾讯地图 -->
+  <script
+    src="https://map.qq.com/api/gljs?libraries=tools,geometry&v=1.exp&key=AELBZ-IDQKJ-AMCFB-K7SRI-F7C53-3IBOY"></script>
+  <!-- 百度地图 -->
+  <script type="text/javascript"
+    src="https://api.map.baidu.com/api?v=1.0&&type=webgl&ak=ajWx13ivNsFCD4HioZwx18jYm25WR8jh">
+    </script>
+  <!-- 引用轨迹动画开源库静态JS文件 -->
+  <script type="text/javascript" src="//api.map.baidu.com/library/TrackAnimation/src/TrackAnimation_min.js"></script>
+</body>
+
+</html>
