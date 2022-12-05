@@ -36,14 +36,37 @@ module.exports = [
       // mock error
       if (!token) {
         return {
-          code: 60204,
-          message: "Account and password are incorrect.",
+          code: 500,
+          message: "账号或密码错误",
         };
       }
 
       return {
-        code: 20000,
+        code: 200,
         data: token,
+      };
+    },
+  },
+  // user register
+  {
+    url: "/vue-admin-template/user/register",
+    type: "post",
+    response: (config) => {
+      // const { username } = config.body;
+      // const token = tokens[username];
+
+      // // mock error
+      // if (!token) {
+      //   return {
+      //     code: 60204,
+      //     message: "Account and password are incorrect.",
+      //   };
+      // }
+
+      return {
+        code: 200,
+        data: null,
+        message: "注册成功",
       };
     },
   },
@@ -59,13 +82,13 @@ module.exports = [
       // mock error
       if (!info) {
         return {
-          code: 50008,
+          code: 500,
           message: "Login failed, unable to get user details.",
         };
       }
 
       return {
-        code: 20000,
+        code: 200,
         data: info,
       };
     },
@@ -77,7 +100,7 @@ module.exports = [
     type: "post",
     response: (_) => {
       return {
-        code: 20000,
+        code: 200,
         data: "success",
       };
     },

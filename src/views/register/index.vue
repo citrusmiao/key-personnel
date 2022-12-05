@@ -1,8 +1,8 @@
 <template>
   <div class="login-container">
     <el-form
-      ref="loginForm"
-      :model="loginForm"
+      ref="registerForm"
+      :model="registerForm"
       :rules="loginRules"
       class="login-form"
       auto-complete="on"
@@ -18,12 +18,13 @@
         </span>
         <el-input
           ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
+          v-model="registerForm.username"
+          placeholder="请输入账号名"
           name="username"
           type="text"
           tabindex="1"
           auto-complete="on"
+          clearable
         />
       </el-form-item>
 
@@ -34,12 +35,13 @@
         <el-input
           :key="passwordType"
           ref="password"
-          v-model="loginForm.password"
+          v-model="registerForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="请输入密码"
           name="password"
           tabindex="2"
           auto-complete="on"
+          clearable
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
@@ -47,6 +49,39 @@
             :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
           />
         </span>
+      </el-form-item>
+
+      <el-form-item prop="name">
+        <span class="svg-container">
+          <svg-icon icon-class="user" />
+        </span>
+        <el-input
+          ref="name"
+          v-model="registerForm.name"
+          placeholder="请输入姓名"
+          name="name"
+          type="text"
+          tabindex="1"
+          auto-complete="on"
+          clearable
+        />
+      </el-form-item>
+
+      <el-form-item prop="phone">
+        <span class="svg-container">
+          <svg-icon icon-class="phone" />
+        </span>
+        <el-input
+          ref="phone"
+          v-model="registerForm.phone"
+          placeholder="请输入手机号"
+          name="phone"
+          tabindex="2"
+          maxlength="13"
+          auto-complete="on"
+          @keyup.enter.native="handleLogin"
+          clearable
+        />
       </el-form-item>
 
       <el-button
@@ -66,83 +101,96 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { validUsername } from "@/utils/validate";
 
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('请输入用户名'))
+        callback(new Error("请输入账号"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
+    const validateName = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error("请输入姓名"));
+      } else {
+        callback();
+      }
+    };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('密码不能少于6位'))
+        callback(new Error("密码不能少于6位"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
+    const validatePhone = (rule, value, callback) => {
+      if (value.length < 11) {
+        callback(new Error("手机号码不能少于11位"));
+      } else {
+        callback();
+      }
+    };
     return {
-      loginForm: {
-        username: 'admin',
-        password: '111111'
+      registerForm: {
+        username: "",
+        password: "",
+        name: "",
+        phone: "",
       },
       loginRules: {
         username: [
-          { required: true, trigger: 'blur', validator: validateUsername }
+          { required: true, trigger: "blur", validator: validateUsername },
         ],
         password: [
-          { required: true, trigger: 'blur', validator: validatePassword }
-        ]
+          { required: true, trigger: "blur", validator: validatePassword },
+        ],
+        name: [{ required: true, trigger: "blur", validator: validateName }],
+        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
       },
       loading: false,
-      passwordType: 'password',
-      redirect: undefined
-    }
-  },
-  watch: {
-    $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
-    }
+      passwordType: "password",
+      redirect: undefined,
+    };
   },
   methods: {
     showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
+      if (this.passwordType === "password") {
+        this.passwordType = "";
       } else {
-        this.passwordType = 'password'
+        this.passwordType = "password";
       }
       this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
+        this.$refs.password.focus();
+      });
     },
     handleLogin() {
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.registerForm.validate((valid) => {
         if (valid) {
-          this.loading = true
+          this.loading = true;
           this.$store
-            .dispatch('user/login', this.loginForm)
+            .dispatch("user/register", this.registerForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || '/' })
-              this.loading = false
+              this.$message.success("注册成功！");
+              setTimeout(() => {
+                this.$router.push("/login");
+                this.loading = false;
+              }, 2000);
             })
             .catch(() => {
-              this.loading = false
-            })
+              this.loading = false;
+            });
         } else {
-          console.log('error submit!!')
-          return false
+          console.log("error submit!!");
+          return false;
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss">
